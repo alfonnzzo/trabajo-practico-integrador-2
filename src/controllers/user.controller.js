@@ -67,7 +67,7 @@ export const getUsersById = async (req, res) => {
   }
 };
 
-export const updateUsers = async (req, res) => {
+export const updateUser = async (req, res) => {
   const { id } = req.params;
   const { username } = req.body;
   try {
