@@ -3,4 +3,4 @@ import { Router } from "express";
 
 export const userRoutes = Router()
 
-userRoutes.post ("/user", createUser)
+userRoutes.post ("/users", createUser)
