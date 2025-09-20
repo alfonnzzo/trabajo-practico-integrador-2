@@ -4,7 +4,7 @@ import {
     getUsersById,
     updateUsers,
     deleteUsers
- } from "../controllers/user.controllers.js";   
+ } from "../controllers/user.controller.js";   
 import { Router } from "express";   
 
 export const userRoutes = Router()

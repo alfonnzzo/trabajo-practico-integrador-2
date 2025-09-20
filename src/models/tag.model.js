@@ -9,7 +9,7 @@ const TagSchema = new Schema ({
     required: true,
     trim: true,
   },
-    description: { 
+  description: { 
     type: String,   
     maxlength: 200,
     required: false,
