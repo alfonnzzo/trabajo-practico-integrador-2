@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 const UserSchema = new Schema({
   username: { 
@@ -48,6 +48,11 @@ const UserSchema = new Schema({
         required: false,
       },
     },
+  articles: {
+    type: Types.ObjectId,
+    ref: "Article",
+  },
+
 });
 
 export const UserModel = model("User", UserSchema);
