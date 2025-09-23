@@ -48,10 +48,10 @@ const UserSchema = new Schema({
         required: false,
       },
     },
-  articles: {
+  articles: [{
     type: Types.ObjectId,
     ref: "Article",
-  },
+  }],
 
 });
 

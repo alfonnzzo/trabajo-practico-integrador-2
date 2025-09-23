@@ -8,9 +8,11 @@ import {
 
 import { Router } from "express";   
 
-export const userRoutes = Router()
+const userRoutes = Router()
 
 userRoutes.get ("/users", getUsers)
 userRoutes.get ("/users/:id", getUsersById)
 userRoutes.put ("/users/:id", updateUser)
 userRoutes.delete ("/users/:id", deleteUsers)
+
+export default userRoutes;

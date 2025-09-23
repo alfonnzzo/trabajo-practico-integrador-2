@@ -20,7 +20,7 @@ export const createTag = async (req, res) => {
 
 export const getTags = async (req, res) => {
   try {
-    const tags = await TagModel.find().populate("tags");
+    const tags = await TagModel.find().populate("Tag");
     if (!tags.length) {
       return res.status(404).json({ msg: "No existen etiquetas" });
     }
