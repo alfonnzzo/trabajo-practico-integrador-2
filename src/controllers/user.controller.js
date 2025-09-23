@@ -1,36 +1,5 @@
 import { UserModel } from "../models/user.model.js";
 
-export const createUser = async (req, res) => {
-  const { username, email, password, role, profile } = req.body;
-  try {
-    const existingUser = await UserModel.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({
-        ok: false,
-        msg: "El usuario ya está registrado con ese email",
-      });
-    }
-    const newUser = await UserModel.create({
-      username,
-      email,
-      password,
-      role,
-      profile
-    });
-    return res.status(201).json({
-      ok: true,
-      msg: "Usuario y perfil creados correctamente",
-      data: newUser
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      ok: false,
-      msg: "Error interno del servidor"
-    });
-  }
-};
-
 export const getUsers = async (req, res) => {
   try {
     const users = await UserModel.find().populate("articles");

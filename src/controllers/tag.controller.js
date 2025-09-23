@@ -1,4 +1,4 @@
-import { TagModel } from "../models/tag.model";
+import { TagModel } from "../models/tag.model.js";
 
 export const createTag = async (req, res) => {
     const { name, description } = req.body;
