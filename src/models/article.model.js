@@ -25,14 +25,14 @@ const ArticleSchema = new Schema ({
     },
     default: "published",
   },
-  author: {
-    type: ObjectId,
+  author: [{
+    type: Types.ObjectId,
     ref: "User",
-  },
-  tags: {
+  }],
+  tags: [{
     type: Types.ObjectId,
     ref: "Tag",
-  },
+  }],
 })
 
 export const ArticleModel = model("Article", ArticleSchema);
