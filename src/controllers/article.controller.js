@@ -44,6 +44,25 @@ export const getArticleById = async (req, res) => {
     }
 }
 
+export const getMyArticles = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ msg: "Usuario no autenticado" });
+    }
+    const articles = await ArticleModel.find({ author: req.user.id }).populate(
+      "tags",
+      "name"
+    );
+    return res.status(200).json({
+      msg: "Artículos del usuario",
+      count: articles.length,
+      articles: articles,
+    });
+  } catch (error) {
+    return res.status(500).json({ msg: "Error interno del servidor" });
+  }
+};
+
 export const updateArticles = async (req, res) => {
     try {
         const updateArticle = await ArticleModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -62,6 +81,7 @@ export const updateArticles = async (req, res) => {
 }
 
 export const deleteArticle = async (req, res) => {
+    console.log(req.params.id)
     try {
         const deleteArticle = await ArticleModel.findByIdAndDelete(req.params.id);
         return res.status(200).json({

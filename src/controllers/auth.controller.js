@@ -45,13 +45,13 @@ export const login = async (req, res) => {
       role: user.role,
       profile: user.profile  
     });
-    console.log(token);
 
     res.cookie("token", token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60,
     });
-    return res.json({ message: "Login exitoso" });
+
+    return res.json({ msg: "Login exitoso" });
   } catch (error) {
     console.log(error);
     return res.status(500).json({

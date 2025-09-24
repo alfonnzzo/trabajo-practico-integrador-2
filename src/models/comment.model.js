@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 const CommentSchema = new Schema ({
   content: { 
@@ -8,11 +8,11 @@ const CommentSchema = new Schema ({
     required: true,
   },
   author: {
-    type: ObjectId,
+    type: Types.ObjectId,
     ref: "User",
   },
   article: {
-    type: ObjectId,
+    type: Types.ObjectId,
     ref: "Article",
   },
 })

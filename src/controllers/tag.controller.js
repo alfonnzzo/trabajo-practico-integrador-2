@@ -1,19 +1,19 @@
 import { TagModel } from "../models/tag.model.js";
 
 export const createTag = async (req, res) => {
-    const { name, description } = req.body;
-    try {
-        const newTag = await TagModel.create({ name, description });
-        return res.status(201).json({
-            ok: true,
-            msg: "Etiqueta creada correctamente",
-            data: newTag
-        })
-    } catch (error) {
+  const { name, description } = req.validatedData;
+  try {
+    const newTag = await TagModel.create({ name, description });
+    return res.status(201).json({
+      ok: true,
+      msg: "Etiqueta creada correctamente",
+      data: newTag,
+    });
+  } catch (error) {
     console.log(error);
     return res.status(500).json({
       ok: false,
-      msg: "Error interno del servidor"
+      msg: "Error interno del servidor",
     });
   }
 };
@@ -29,13 +29,13 @@ export const getTags = async (req, res) => {
     console.error("Error al obtener etiquetas:", error);
     return res.status(500).json({
       ok: false,
-      msg: "Error interno del servidor"
+      msg: "Error interno del servidor",
     });
   }
 };
 
 export const getTagsById = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.validatedData;
   try {
     const tags = await TagModel.findById(id);
     if (!tags) {
@@ -43,7 +43,7 @@ export const getTagsById = async (req, res) => {
     }
     return res.status(200).json({
       ok: true,
-      data: tags
+      data: tags,
     });
   } catch (error) {
     console.error(error);
@@ -65,19 +65,19 @@ export const updateTags = async (req, res) => {
     );
     if (!updatedTags) {
       return res.status(404).json({
-        message: "Etiqueta no encontrada"
+        message: "Etiqueta no encontrada",
       });
     }
     return res.status(200).json({
       ok: true,
       msg: "Etiqueta actualizada correctamente",
-      data: updatedTags
+      data: updatedTags,
     });
   } catch (error) {
     console.error("Error actualizando etiqueta:", error);
     return res.status(500).json({
       ok: false,
-      msg: "Error interno del servidor"
+      msg: "Error interno del servidor",
     });
   }
 };
@@ -89,20 +89,19 @@ export const deleteTags = async (req, res) => {
     if (!deletedTags) {
       return res.status(404).json({
         ok: false,
-        msg: "Etiqueta no encontrada"
+        msg: "Etiqueta no encontrada",
       });
     }
     return res.status(200).json({
       ok: true,
       msg: "Etiqueta eliminada correctamente",
-      data: deleteTags
+      data: deleteTags,
     });
-
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       ok: false,
-      msg: "Error interno del servidor"
+      msg: "Error interno del servidor",
     });
   }
 };

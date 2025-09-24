@@ -51,6 +51,9 @@ const UserSchema = new Schema({
     type: Types.ObjectId,
     ref: "Article",
   }],
+}, {
+  timestamps: true,
+  versionKey: false,
 });
 
 export const UserModel = model("User", UserSchema);

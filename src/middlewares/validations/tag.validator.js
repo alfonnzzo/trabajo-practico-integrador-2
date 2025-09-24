@@ -1,5 +1,5 @@
 import { body, param } from "express-validator";
-import { TagModel } from "../models/tag.model.js";
+import { TagModel } from "../../models/tag.model.js";
 import mongoose from "mongoose";
 
 // --- CREATE ---

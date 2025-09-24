@@ -47,7 +47,7 @@ export const updateUser = async (req, res) => {
     );
     if (!updatedUser) {
       return res.status(404).json({
-        message: "Usuario no encontrado",
+        msg: "Usuario no encontrado",
       });
     }
     return res.status(200).json({

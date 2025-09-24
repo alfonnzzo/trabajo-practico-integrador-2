@@ -1,6 +1,8 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
+import mongoose from "mongoose";
+import { ArticleModel } from "../../models/article.model.js";
 
-export const articleValidations = [
+export const createArticleValidations = [
   // title requerido
   body("title")
     .notEmpty()
