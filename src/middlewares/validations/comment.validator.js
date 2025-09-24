@@ -1,24 +1,19 @@
-import { body } from "express-validator";
+import { param } from "express-validator";
+import mongoose from "mongoose";
+import { CommentModel } from "../../models/comment.model.js";
 
-export const commentValidations = [
-  // content obligatorio, mínimo 5, máximo 500
-  body("content")
-    .notEmpty()
-    .withMessage("El contenido es obligatorio")
-    .isLength({ min: 5, max: 500 })
-    .withMessage("El contenido debe tener entre 5 y 500 caracteres"),
+export const commentIdValidation = [
+  // Verifica que sea un ObjectId válido
+  param("id")
+    .custom((value) => mongoose.Types.ObjectId.isValid(value))
+    .withMessage("El ID no es válido"),
 
-  // author obligatorio y debe ser ObjectId válido
-  body("author")
-    .notEmpty()
-    .withMessage("El autor es obligatorio")
-    .isMongoId()
-    .withMessage("El autor debe ser un ID de MongoDB válido"),
-
-  // article obligatorio y debe ser ObjectId válido
-  body("article")
-    .notEmpty()
-    .withMessage("El artículo es obligatorio")
-    .isMongoId()
-    .withMessage("El artículo debe ser un ID de MongoDB válido"),
+  // Verifica que exista un comentario con ese ID
+  param("id").custom(async (value) => {
+    const comment = await CommentModel.findById(value);
+    if (!comment) {
+      throw new Error("No existe un comentario con ese ID");
+    }
+    return true;
+  }),
 ];

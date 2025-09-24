@@ -18,12 +18,6 @@ app.use(routerIndex);
 
 const PORT = process.env.PORT;
 
-// app.listen(PORT, () =>{
-//     console.log("Servidor corriendo en puerto "+PORT);
-// })
-
-// connectDB();
-
 connectDB().then(() => {
   app.listen(PORT, () => {
     console.log("Servidor corriendo en puerto " + PORT);

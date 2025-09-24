@@ -7,14 +7,14 @@ const CommentSchema = new Schema ({
     maxlength: 500,
     required: true,
   },
-  author: {
+  author: [{
     type: Types.ObjectId,
     ref: "User",
-  },
-  article: {
+  }],
+  article: [{
     type: Types.ObjectId,
     ref: "Article",
-  },
+  }],
 })
 
 export const CommentModel = model("Comment", CommentSchema);

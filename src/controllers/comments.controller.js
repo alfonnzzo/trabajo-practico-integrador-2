@@ -20,8 +20,9 @@ export const createComment = async (req, res) => {
 
 export const getComments = async (req, res) => {
   try {
-    const comments = await CommentModel.find();
-    populate("author").populate("article");
+    const comments = await CommentModel.find()
+    .populate("author")
+    .populate("article");
     return res.status(200).json(comments);
   } catch (error) {
     console.error(error);
