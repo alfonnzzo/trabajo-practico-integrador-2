@@ -1,23 +1,34 @@
-
-import { hashPassword, comparePassword} from "../helpers/bcrypt.helper.js";
+import { hashPassword, comparePassword } from "../helpers/bcrypt.helper.js";
 import { UserModel } from "../models/user.model.js";
-import { generateToken } from "../helpers/jwt.helper.js"; 
+import { generateToken } from "../helpers/jwt.helper.js";
+
+// Opciones únicas para la cookie de sesión: se usan al setearla y al borrarla.
+// Si no coinciden, el navegador no borra la cookie en el logout.
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict",
+};
 
 export const register = async (req, res) => {
-  const { username, email, password, role, profile } = req.body;
-  const hashed = await hashPassword(password);
+  // `role` NO se lee del body: si se leyera, cualquiera podría registrarse
+  // mandando { role: "admin" } y saltearse todos los permisos.
+  const { username, email, password, profile } = req.body;
   try {
+    // El hasheo va dentro del try: si falta `password`, bcrypt lanza.
+    const hashed = await hashPassword(password);
     const newUser = await UserModel.create({
       username,
       email,
       password: hashed,
-      role,
+      role: "user",
       profile,
     });
     return res.status(201).json({
       ok: true,
       msg: "Usuario y perfil creados correctamente",
-      data: newUser,
+      // No devolvemos el documento entero: incluye el hash de la contraseña.
+      data: { id: newUser.id, username: newUser.username, email: newUser.email },
     });
   } catch (error) {
     console.log(error);
@@ -32,36 +43,32 @@ export const login = async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await UserModel.findOne({ username });
-    if (!user) {
-      return res.status(404).json({ msg: "Credenciales invalidas" });
+    // Misma respuesta para "no existe" y "contraseña incorrecta". Si se
+    // distinguen (404 vs 401), se puede averiguar qué usuarios existen.
+    if (!user || !(await comparePassword(password, user.password))) {
+      return res.status(401).json({ ok: false, msg: "Credenciales inválidas" });
     }
-    const validPassword = await comparePassword(password, user.password);
-    if (!validPassword) {
-      return res.status(401).json({ message: "Credenciales inválidas" });
-    }
+
     const token = generateToken({
       id: user.id,
       username: user.username,
       role: user.role,
-      profile: user.profile  
+      profile: user.profile,
     });
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60,
-    });
+    res.cookie("token", token, { ...cookieOptions, maxAge: 1000 * 60 * 60 });
 
-    return res.json({ msg: "Login exitoso" });
+    return res.json({ ok: true, msg: "Login exitoso" });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       ok: false,
       msg: "Error interno del servidor",
-    }); 
+    });
   }
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("token");
-  return res.json({ msg: "Logout exitoso" }); 
+  res.clearCookie("token", cookieOptions);
+  return res.json({ ok: true, msg: "Logout exitoso" });
 };
